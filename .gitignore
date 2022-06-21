@@ -1,0 +1,10 @@
+.DS_Store
+.snowpack
+build
+node_modules
+file.env
+.prettierrc
+snowpack.config.mjs
+tsconfig.json
+web-test-runner.config.js
+types
