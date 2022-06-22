@@ -1,0 +1,171 @@
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
+
+type Inputs = {
+  person1: string,
+  person2: string,
+  zipcode: number,
+  miles: number,
+  price: string,
+  new: string
+};
+
+function Rules () {
+
+  const [person1, setPerson1] = useState({
+    name: "Not Sure Yet"
+  });
+
+  const [person2, setPerson2] = useState({
+    name: "Who is this"
+  });
+
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm<Inputs>();
+
+  function onSubmit (data: any, e: any) {
+    e.preventDefault();
+
+    alert(JSON.stringify(data));
+
+    // axios.post('/rsvps', {}).then((responce) => {
+    //   // this.setState({"attending": responce.data})
+    // });
+    // reset();
+  }
+
+
+  return (
+    <div className="section">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h1>Ground Rules</h1>
+        <div
+          className="main-container"
+          style={{ display: 'flex', justifyContent: 'space-between' }}
+        >
+          <div className="left-container">
+            <p>
+              3 Rounds <br />
+              2 Indecisive People <br />
+              1 Choice - Where to Eat <br /> <br />
+              <b style={{ color: 'rose' }}>Please fill out this page: </b>
+            </p>
+            <h3>Person 1: </h3>
+            <input
+              {...register('person1')}
+              type="text"
+              name="person1"
+              placeholder="First Name Please"
+              id="person1"
+              required
+            />
+            <h3>Person 2: </h3>
+            <input
+              {...register('person2')}
+              type="text"
+              name="person2"
+              placeholder="First Name Please"
+              id="person2"
+              required
+            />
+          </div>
+          <div className="right-container">
+            <h3>ZipCode</h3>
+            <p>
+              Let's choose a Zip Code:
+              <br />
+              <input
+                {...register('zipcode', {maxLength: 5})}
+                type="number"
+                name="zipcode"
+                placeholder="5 digits please"
+                minLength={5}
+                id="zipcode"
+                required
+              />
+              <br />
+              <br />
+              How far do you wanna drive?:
+              <br />
+              <input
+                {...register('miles', {maxLength: 2})}
+                type="number"
+                name="miles"
+                placeholder="in Miles (you're in US right?)"
+                minLength={1}
+                id="miles"
+                required
+              />
+            </p>
+
+            <div>
+              <div>
+                Can we agree on the price?
+                <div className="radio-buttons">
+                  <label>
+                    <input
+                      {...register('price')}
+                      type="radio"
+                      name="price"
+                      value="$$$"
+                      required
+                    />
+                    $$$
+                  </label>
+                  <label>
+                    <input
+                      {...register('price')}
+                      type="radio"
+                      name="price"
+                      value="$$"
+                      required
+                    />
+                    $$
+                  </label>
+                  <label>
+                    <input
+                      {...register('price')}
+                      type="radio"
+                      name="price"
+                      value="$"
+                      required
+                    />
+                    $$
+                  </label>
+                </div>
+              </div>
+            </div>
+            <br />
+            <div>
+              Do we want to try something new?
+              <label>
+                <input
+                  {...register('new')}
+                  type="checkbox"
+                  name="new"
+                  value="new"
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+        <h4>
+          {(watch('person1')) || 'Person 1'} and {(watch('person2')) || 'Person 2'} have no idea what they want to eat, but they do know they want something at most {(watch('miles'))  || 'something close by.'} {(watch('miles')) ? 'miles away' : ''} Let's
+          start by pressing the button below
+        </h4>
+        <button style={{ height: 40, minWidth: '20%' }} type="submit">
+          Send
+        </button>
+
+      </form>
+    </div>
+  );
+  }
+
+  export default Rules ;
