@@ -26,7 +26,39 @@ function removeEmpty(arr: any) {
 
 function App(this: any): JSX.Element {
   const [selectionTags, setTags] = useState<string[]>([]);
-  const [choiceResults, setChoices] = useState<object[]>([{}]);
+  const [choiceResults, setChoices] = useState<object[]>([
+    {
+      alias: '',
+      categories: [],
+      coordinates: {
+        latitude: 0,
+        longitude: -1,
+      },
+      display_phone: '',
+      distance: 100,
+      id: '',
+      image_url:
+        '',
+      is_closed: false,
+      location: {
+        address1: '',
+        address2: '',
+        address3: '',
+        city: 'San Diego',
+        country: 'US',
+        display_address: ['', ''],
+        state: '',
+        zip_code: '',
+      },
+      name: '',
+      phone: '',
+      price: '',
+      rating: 3,
+      review_count: 100,
+      transactions: ['pickup', 'delivery'],
+      url: '',
+    },
+  ]);
   const [search, setSearch] = useState({
     radius: 5,
     new: false,
@@ -134,7 +166,7 @@ function App(this: any): JSX.Element {
       </section>
 
       <section id="Choice_Grid">
-        <Choice_Grid />
+        <Choice_Grid choiceResults={choiceResults} />
       </section>
 
       <section id="Final_Choice">

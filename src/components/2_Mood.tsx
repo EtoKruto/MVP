@@ -113,8 +113,8 @@ const Mood: React.FC<MoodProps> = ({
           </div>
         </div>
       </div>
-      <h4>
-        <p>Tags Chosen: </p>
+      <div>
+        <h2>Tags Chosen: </h2>
         <p>
           {watch('tags_1')}
           {watch('tags_1') ? ', ' : ' '}
@@ -128,7 +128,7 @@ const Mood: React.FC<MoodProps> = ({
         </p>
         When Done, Press Submit to go the next step(this initiates the API
         search)
-      </h4>
+      </div>
       <button type="submit">Continue</button>
     </div>
   );

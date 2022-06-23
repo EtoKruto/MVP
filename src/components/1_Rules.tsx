@@ -64,7 +64,7 @@ const Rules: React.FC<RuleProps> = ({ onSubmitPage1 }: RuleProps) => {
           </div>
           <div className="right-container">
             <h3>ZipCode</h3>
-            <p>
+            <div>
               Let's choose a Zip Code:
               <br />
               <input
@@ -89,7 +89,7 @@ const Rules: React.FC<RuleProps> = ({ onSubmitPage1 }: RuleProps) => {
                 id="radius"
                 required
               />
-            </p>
+            </div>
             <div>
               <div>
                 Can we agree on the price?
