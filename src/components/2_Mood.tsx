@@ -1,39 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
-// import Marquee from "react-fast-marquee";
+import { useForm } from 'react-hook-form';
 import Marquee from 'react-marquee-master';
 import tags from '../data/data.js';
+
 type Inputs = {
-  tags_1: string,
-  tags_2: string,
-  tags_3: string,
-  tags_4: string,
-  tags_5: string,
+  tags_1: string;
+  tags_2: string;
+  tags_3: string;
+  tags_4: string;
+  tags_5: string;
 };
+interface MoodProps {
+  onSubmitPage2: Function;
+  selectionTags: string[];
+}
 
-export default function Mood () {
-
+const Mood: React.FC<MoodProps> = ({
+  onSubmitPage2,
+  selectionTags,
+}: MoodProps) => {
   const {
     register,
     handleSubmit,
     watch,
-    reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm<Inputs>();
 
-
-  function onSubmit (data: any, e: any) {
+  function onSubmit(data: any, e: any) {
     e.preventDefault();
-
-    alert(JSON.stringify(data));
-
-    // axios.post('/rsvps', {}).then((responce) => {
-    //   // this.setState({"attending": responce.data})
-    // });
-    // reset();
+    onSubmitPage2(data);
   }
-
-
 
   return (
     <div className="section">
@@ -97,7 +93,23 @@ export default function Mood () {
         <div className="right-container" style={{ minWidth: 400 }}>
           <h3>Selection of Tags Available</h3>
           <div className="marquee-container-outline">
-          <Marquee marqueeItems={tags} direction={"up"} height={400} delay={30}/>
+            {selectionTags.length ? (
+              <Marquee
+                marqueeItems={selectionTags}
+                direction={'up'}
+                height={400}
+                delay={30}
+                key={selectionTags[0]}
+              />
+            ) : (
+              <Marquee
+                marqueeItems={tags}
+                direction={'up'}
+                height={400}
+                delay={30}
+                key={selectionTags[0]}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -120,8 +132,6 @@ export default function Mood () {
       <button type="submit">Continue</button>
     </div>
   );
-    }
+};
 
-
-
-
+export default Mood;

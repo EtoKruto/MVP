@@ -3,25 +3,19 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
 type Inputs = {
-  person1: string,
-  person2: string,
-  zipcode: number,
-  miles: number,
-  price: string,
-  new: string
+  person1: string;
+  person2: string;
+  zipcode: number;
+  radius: number;
+  price: string;
+  new: string;
 };
 
-function Rules () {
+interface RuleProps {
+  onSubmitPage1: Function;
+}
 
-  const [person1, setPerson1] = useState({
-    name: "Not Sure Yet"
-  });
-
-  const [person2, setPerson2] = useState({
-    name: "Who is this"
-  });
-
-
+const Rules: React.FC<RuleProps> = ({ onSubmitPage1 }: RuleProps) => {
   const {
     register,
     handleSubmit,
@@ -29,17 +23,10 @@ function Rules () {
     formState: { errors },
   } = useForm<Inputs>();
 
-  function onSubmit (data: any, e: any) {
+  function onSubmit(data: any, e: any) {
     e.preventDefault();
-
-    alert(JSON.stringify(data));
-
-    // axios.post('/rsvps', {}).then((responce) => {
-    //   // this.setState({"attending": responce.data})
-    // });
-    // reset();
+    onSubmitPage1(data);
   }
-
 
   return (
     <div className="section">
@@ -81,7 +68,7 @@ function Rules () {
               Let's choose a Zip Code:
               <br />
               <input
-                {...register('zipcode', {maxLength: 5})}
+                {...register('zipcode', { maxLength: 5 })}
                 type="number"
                 name="zipcode"
                 placeholder="5 digits please"
@@ -94,16 +81,15 @@ function Rules () {
               How far do you wanna drive?:
               <br />
               <input
-                {...register('miles', {maxLength: 2})}
+                {...register('radius', { maxLength: 2 })}
                 type="number"
-                name="miles"
+                name="radius"
                 placeholder="in Miles (you're in US right?)"
                 minLength={1}
-                id="miles"
+                id="radius"
                 required
               />
             </p>
-
             <div>
               <div>
                 Can we agree on the price?
@@ -149,23 +135,25 @@ function Rules () {
                   {...register('new')}
                   type="checkbox"
                   name="new"
-                  value="new"
+                  value="true"
                 />
               </label>
             </div>
           </div>
         </div>
         <h4>
-          {(watch('person1')) || 'Person 1'} and {(watch('person2')) || 'Person 2'} have no idea what they want to eat, but they do know they want something at most {(watch('miles'))  || 'something close by.'} {(watch('miles')) ? 'miles away' : ''} Let's
-          start by pressing the button below
+          {watch('person1') || 'Person 1'} and {watch('person2') || 'Person 2'}{' '}
+          have no idea what they want to eat, but they do know they want
+          something at most {watch('radius') || 'something close by.'}{' '}
+          {watch('radius') ? 'miles away.' : ''} Let's start by pressing the
+          button below
         </h4>
         <button style={{ height: 40, minWidth: '20%' }} type="submit">
           Send
         </button>
-
       </form>
     </div>
   );
-  }
+};
 
-  export default Rules ;
+export default Rules;

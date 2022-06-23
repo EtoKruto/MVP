@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState } from 'react';
+import axios from 'axios';
 
-import { Routes, Route } from "react-router-dom";
+function removeDuplicatesInArray(array: string[]) {
+  return array.filter((item, index) => array.indexOf(item) === index);
+}
+import { Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
 import './App.css';
@@ -11,33 +14,98 @@ import Choice_Grid from './3_Choice_Grid';
 import Final_Choice from './4_Final_Choice';
 import Details_Modal from './Details_Modal';
 
+// Specific object/key to array
+function objectToArray(obj: any, key?: string) {
+  return Object.keys(obj).map((key) => obj[key]);
+}
 
-
+// Remove empty values from array
+function removeEmpty(arr: any) {
+  return arr.filter(Boolean);
+}
 
 function App(this: any): JSX.Element {
-  // const { register, handleSubmit, watch } = useForm<Inputs>();
-
-  // function onSubmit(data: any, e: any) {
-  //   e.preventDefault();
-
-  //   alert(JSON.stringify(data));
-
-  //   // axios.post('/rsvps', {}).then((responce) => {
-  //   //   // this.setState({"attending": responce.data})
-  //   // });
-  //   // reset();
-  // }
-
-  const [person1, setPerson1] = useState({
-    name: '',
-  });
-  const [person2, setPerson2] = useState({
-    name: '',
+  const [selectionTags, setTags] = useState<string[]>([]);
+  const [choiceResults, setChoices] = useState<object[]>([{}]);
+  const [search, setSearch] = useState({
+    radius: 5,
+    new: false,
+    person1: 'Alex',
+    person2: 'also Alex',
+    price: '$$$',
+    zipcode: '92108',
+    lat: 0,
+    lng: 0,
   });
 
-  useEffect(() => {}, []);
+  function onSubmitPage1(data: any) {
+    setSearch(data);
+    axios
+      .get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${
+          data.zipcode
+        }&key=${import.meta.env.GOOGLE_API_KEY}`,
+      )
+      .then(function (response) {
+        const { lat, lng } = response.data.results[0].geometry.location;
 
-  useEffect(() => {}, []);
+        setSearch({ ...search, lat: lat, lng: lng });
+
+        console.log(search);
+
+        var params: any = {
+          term: '',
+          latitude: lat,
+          longitude: lng,
+          radius: data.miles * 1609.34,
+          limit: 20,
+        };
+        axios
+          .get(`http://localhost:3001/restaurants`, { params: params })
+          .then((APIresponse) => {
+            const temptags: string[] = [];
+
+            APIresponse.data.businesses.forEach((business: any) => {
+              business.categories.forEach((category: any) => {
+                temptags.push(category.title);
+              });
+            });
+            setTags(removeDuplicatesInArray(temptags));
+          })
+          .catch((error) => {
+            console.log('error', error);
+          });
+      });
+  }
+
+  function onSubmitPage2(data: any) {
+    const sendToYelp = removeEmpty(objectToArray(data)).join(', ');
+    const { lat, lng, radius } = search;
+
+    var params: any = {
+      term: sendToYelp,
+      latitude: lat,
+      longitude: lng,
+      radius: radius * 1609.34,
+      limit: '50',
+    };
+
+    console.log('params', params);
+    axios
+      .get(`http://localhost:3001/restaurants`, { params: params })
+      .then((APIresponse) => {
+        const businessArr: object[] = [];
+
+        APIresponse.data.businesses.forEach((business: any) => {
+          console.log('business', business);
+          businessArr.push(business);
+        });
+        setChoices(businessArr);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
+  }
 
   // useEffect(() => {
   //   const timer = setTimeout(() => setCount(count + 1), 1000);
@@ -58,11 +126,11 @@ function App(this: any): JSX.Element {
       </nav>
 
       <section id="Rules">
-        <Rules />
+        <Rules onSubmitPage1={onSubmitPage1} />
       </section>
 
       <section id="Mood">
-        <Mood />
+        <Mood onSubmitPage2={onSubmitPage2} selectionTags={selectionTags} />
       </section>
 
       <section id="Choice_Grid">
@@ -76,6 +144,6 @@ function App(this: any): JSX.Element {
       <Details_Modal />
     </>
   );
-  }
+}
 
-  export default App;
+export default App;

@@ -3,6 +3,7 @@
 build
 node_modules
 file.env
+.env
 .prettierrc
 snowpack.config.mjs
 tsconfig.json
