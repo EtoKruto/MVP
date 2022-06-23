@@ -1,4 +1,7 @@
 
+function removeDuplicatesInArray(array: any[]) {
+  return array.filter((item, index) => array.indexOf(item) === index);
+}
 
 let tags: Array<string>  = [
   "Thai",
@@ -118,4 +121,4 @@ let tags: Array<string>  = [
   "Party & Event Planning"
 ]
 
-export default tags;
+export default removeDuplicatesInArray(tags);

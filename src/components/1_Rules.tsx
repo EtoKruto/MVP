@@ -26,7 +26,7 @@ function Rules () {
     register,
     handleSubmit,
     watch,
-    formState: { errors }
+    formState: { errors },
   } = useForm<Inputs>();
 
   function onSubmit (data: any, e: any) {

@@ -62,7 +62,7 @@ function App(this: any): JSX.Element {
       </section>
 
       <section id="Mood">
-        <Mood mood="good" />
+        <Mood />
       </section>
 
       <section id="Choice_Grid">
