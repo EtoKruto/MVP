@@ -13,11 +13,13 @@ type Inputs = {
 interface MoodProps {
   onSubmitPage2: Function;
   selectionTags: string[];
+  players: string[];
 }
 
 const Mood: React.FC<MoodProps> = ({
   onSubmitPage2,
   selectionTags,
+  players,
 }: MoodProps) => {
   const {
     register,
@@ -29,13 +31,13 @@ const Mood: React.FC<MoodProps> = ({
   function onSubmit(data: any, e: any) {
     e.preventDefault();
     onSubmitPage2(data);
+
   }
 
   return (
     <div className="section">
       <h1 style={{ padding: 20 }}>
-        {' '}
-        PERSON 1 - What are you in the Mood for?{' '}
+        {players[0]} - What are you in the Mood for?{' '}
       </h1>
       <h2> </h2>
       <div
@@ -92,10 +94,7 @@ const Mood: React.FC<MoodProps> = ({
             <button
               style={{ height: 80, minWidth: '20%' }}
               type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.href = '#Choice_Grid';
-              }}
+
             >
               Submit after you've entered Tags
             </button>

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Container } from 'react-bootstrap';
 
-interface AppProps {}
 
-function Final_Choice({ page3Choices }: any) {
+interface FinalProps {
+  page3Choices: object[];
+  players: string[];
+}
+const Final_Choice: React.FC<FinalProps> = ({ page3Choices, players }: any) => {
   return (
     <div className="section">
-      <h1> PERSON 1 - Please Select the final choice </h1>
+      <h1> {players[0]} - Please Select the final choice </h1>
       <div className="top-container" style={{ display: 'flex' }}></div>
       <div className="main-container">
         <Container style={{ height: 500, overflow: 'overlay' }}>

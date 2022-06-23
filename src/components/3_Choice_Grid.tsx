@@ -8,10 +8,11 @@ function Choice_Grid({
   filter,
   handleChange,
   handleClick,
+  players,
 }: any) {
   return (
     <div className="section">
-      <h1> PERSON 2 - Please select up to 3 places by clicking on the card </h1>
+      <h1> {players[1]} - Please select up to 3 places by clicking on the card </h1>
       <div className="top-container" style={{ display: 'flex' }}>
         <h3 style={{ marginRight: 20 }}> How about a fitler? </h3>
         <Dropdown
@@ -68,7 +69,9 @@ function Choice_Grid({
       </h4>
       <button type="submit" onClick={(e) => {
                 e.preventDefault();
-                window.location.href = '#Final_Choice';
+                setTimeout(() => {
+                  window.location.href = '#Final_Choice';
+                }, 500);
               }}>Continue</button>
     </div>
   );

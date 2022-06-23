@@ -65,7 +65,7 @@ function App(this: any): JSX.Element {
     } else {
       newChoices = sortByKey(old, filter, 'asc');
     }
-    console.log(newChoices);
+    // console.log(newChoices);
     setChoices(newChoices);
   }, [filter]);
 
@@ -73,7 +73,7 @@ function App(this: any): JSX.Element {
     // get object in array where id matches
     const item: any =
       choiceResults.find((business: any) => business.id === id) || {};
-    console.log('page3Choices.length', page3Choices.length);
+    // console.log('page3Choices.length', page3Choices.length);
     setPage3Choices([...page3Choices, item]);
   };
 
@@ -82,7 +82,7 @@ function App(this: any): JSX.Element {
   // };
 
   function onSubmitPage1(data: any) {
-    console.log('data', data);
+    // console.log('data', data);
     setPlayers([data.person1, data.person2]);
     setSearch(data);
     axios
@@ -96,13 +96,14 @@ function App(this: any): JSX.Element {
 
         setSearch({ ...search, lat: lat, lng: lng });
 
-        console.log(search);
+        // console.log(search);
         var params: any = {
           term: '',
           latitude: lat,
           longitude: lng,
           radius: data.miles * 1609.34,
-          limit: 20,        };
+          limit: 20,
+        };
         axios
           .get(`http://localhost:3001/restaurants`, { params: params })
           .then((APIresponse) => {
@@ -114,6 +115,9 @@ function App(this: any): JSX.Element {
               });
             });
             setTags(removeDuplicatesInArray(temptags));
+            setTimeout(() => {
+              window.location.href = '#Mood';
+            }, 500);
           })
           .catch((error) => {
             console.log('error', error);
@@ -145,6 +149,9 @@ function App(this: any): JSX.Element {
         });
 
         setChoices(sortByKey(businessArr, filter, 'dsc'));
+        setTimeout(() => {
+          window.location.href = '#Choice_Grid';
+        }, 500);
       })
       .catch((error) => {
         console.log('error', error);
@@ -178,7 +185,11 @@ function App(this: any): JSX.Element {
       </section>
 
       <section id="Mood">
-        <Mood onSubmitPage2={onSubmitPage2} selectionTags={selectionTags} />
+        <Mood
+          onSubmitPage2={onSubmitPage2}
+          selectionTags={selectionTags}
+          players={players}
+        />
       </section>
 
       <section id="Choice_Grid">
@@ -187,18 +198,20 @@ function App(this: any): JSX.Element {
           filter={filter}
           handleChange={handleChange}
           handleClick={handleClick}
+          players={players}
         />
       </section>
 
       <section id="Final_Choice">
-        <Final_Choice
-          page3Choices={page3Choices}
-        />
+        <Final_Choice page3Choices={page3Choices} players={players} />
       </section>
       <section id="Fireworks">
         <div className="pyro">
           <div className="before"></div>
-          <div className="didIt">YOU DID IT</div>
+          <div className="didIt">YOU DID IT. {'\n'}</div>
+          <div className="didIt">
+            PRESS RESET IN THE TOP RIGHT TO START OVER
+          </div>
 
           <div className="after"></div>
         </div>

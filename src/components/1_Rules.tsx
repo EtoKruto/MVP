@@ -26,6 +26,7 @@ const Rules: React.FC<RuleProps> = ({ onSubmitPage1 }: RuleProps) => {
   function onSubmit(data: any, e: any) {
     e.preventDefault();
     onSubmitPage1(data);
+
   }
 
   return (
@@ -151,10 +152,7 @@ const Rules: React.FC<RuleProps> = ({ onSubmitPage1 }: RuleProps) => {
         <button
           style={{ height: 60, minWidth: '20%' }}
           type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            window.location.href = '#Mood';
-          }}
+
         >
           Send
         </button>
