@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function removeDuplicatesInArray(array: string[]) {
-  return array.filter((item, index) => array.indexOf(item) === index);
-}
 import { Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
 import './App.css';
+import './Fireworks.css';
 import Rules from './1_Rules';
 import Mood from './2_Mood';
 import Choice_Grid from './3_Choice_Grid';
 import Final_Choice from './4_Final_Choice';
 import Details_Modal from './Details_Modal';
 
+function removeDuplicatesInArray(array: string[]) {
+  return array.filter((item, index) => array.indexOf(item) === index);
+}
 // Specific object/key to array
 function objectToArray(obj: any, key?: string) {
   return Object.keys(obj).map((key) => obj[key]);
@@ -24,51 +25,71 @@ function removeEmpty(arr: any) {
   return arr.filter(Boolean);
 }
 
+// sort array by key value pair with sort Option
+function sortByKey(array: any, key: string, sortOption: string) {
+  return array.sort((a: any, b: any) => {
+    if (sortOption === 'asc') {
+      return a[key] - b[key];
+    } else {
+      return b[key] - a[key];
+    }
+  });
+}
+
 function App(this: any): JSX.Element {
   const [selectionTags, setTags] = useState<string[]>([]);
-  const [choiceResults, setChoices] = useState<object[]>([
-    {
-      alias: '',
-      categories: [],
-      coordinates: {
-        latitude: 0,
-        longitude: -1,
-      },
-      display_phone: '',
-      distance: 100,
-      id: '',
-      image_url:
-        '',
-      is_closed: false,
-      location: {
-        address1: '',
-        address2: '',
-        address3: '',
-        city: 'San Diego',
-        country: 'US',
-        display_address: ['', ''],
-        state: '',
-        zip_code: '',
-      },
-      name: '',
-      phone: '',
-      price: '',
-      rating: 3,
-      review_count: 100,
-      transactions: ['pickup', 'delivery'],
-      url: '',
-    },
-  ]);
+  const [page3Choices, setPage3Choices] = useState<object[]>([]);
+  const [choiceResults, setChoices] = useState<object[]>([dummyObj]);
+
   const [search, setSearch] = useState({
     radius: 5,
     new: false,
-    person1: 'Alex',
-    person2: 'also Alex',
-    price: '$$$',
-    zipcode: '92108',
+    person1: '',
+    person2: '',
+    price: '',
+    zipcode: '',
     lat: 0,
     lng: 0,
   });
+  const [filter, setFilter] = useState('rating');
+
+  const handleChange = (event: any) => {
+    setFilter(event.target.value);
+  };
+  useEffect(() => {
+    let old = [...choiceResults];
+    let newChoices = [];
+    if (filter === 'rating') {
+      newChoices = sortByKey(old, filter, 'desc');
+    } else {
+      newChoices = sortByKey(old, filter, 'asc');
+    }
+    console.log(newChoices);
+    setChoices(newChoices);
+  }, [filter]);
+
+  const handleClick = (id: any) => {
+    // get object in array where id matches
+    const item: any =
+      choiceResults.find((business: any) => business.id === id) || {};
+    console.log('page3Choices.length', page3Choices.length);
+    setPage3Choices([...page3Choices, item]);
+    // page3Choices.length > 0
+    //   ?
+    //   : setPage3Choices([item]);
+  };
+
+  const handleClickFinal = (id: any) => {
+    // get object in array where id matches
+    // const item: any =
+    //   choiceResults.find((business: any) => business.id === id) || {};
+
+    console.log('congrats!');
+    // setPage3Choices([...page3Choices, item]);
+    // let choicesVar = page3Choices.length ? page3Choices : []
+
+    // setPage3Choices([...choicesVar, item]);
+  };
 
   function onSubmitPage1(data: any) {
     setSearch(data);
@@ -122,28 +143,20 @@ function App(this: any): JSX.Element {
       limit: '50',
     };
 
-    console.log('params', params);
     axios
       .get(`http://localhost:3001/restaurants`, { params: params })
       .then((APIresponse) => {
         const businessArr: object[] = [];
-
         APIresponse.data.businesses.forEach((business: any) => {
-          console.log('business', business);
           businessArr.push(business);
         });
-        setChoices(businessArr);
+
+        setChoices(sortByKey(businessArr, filter, 'dsc'));
       })
       .catch((error) => {
         console.log('error', error);
       });
   }
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setCount(count + 1), 1000);
-  //   return () => clearTimeout(timer);
-  // }, [count, setCount]);
-
   return (
     <>
       <nav>
@@ -166,11 +179,27 @@ function App(this: any): JSX.Element {
       </section>
 
       <section id="Choice_Grid">
-        <Choice_Grid choiceResults={choiceResults} />
+        <Choice_Grid
+          choiceResults={choiceResults}
+          filter={filter}
+          handleChange={handleChange}
+          handleClick={handleClick}
+        />
       </section>
 
       <section id="Final_Choice">
-        <Final_Choice />
+        <Final_Choice
+          page3Choices={page3Choices}
+          handleClickFinal={handleClickFinal}
+        />
+      </section>
+      <section id="Fireworks">
+        <div className="pyro">
+          <div className="before"></div>
+          <div>YOU DID IT</div>
+
+          <div className="after"></div>
+        </div>
       </section>
 
       <Details_Modal />
@@ -179,3 +208,34 @@ function App(this: any): JSX.Element {
 }
 
 export default App;
+
+let dummyObj = {
+  alias: '',
+  categories: [],
+  coordinates: {
+    latitude: 0,
+    longitude: -1,
+  },
+  display_phone: '',
+  distance: 100,
+  id: '',
+  image_url: '',
+  is_closed: false,
+  location: {
+    address1: '',
+    address2: '',
+    address3: '',
+    city: '',
+    country: 'US',
+    display_address: ['', ''],
+    state: '',
+    zip_code: '',
+  },
+  name: '',
+  phone: '',
+  price: '',
+  rating: 3,
+  review_count: 100,
+  transactions: ['pickup', 'delivery'],
+  url: '',
+};
