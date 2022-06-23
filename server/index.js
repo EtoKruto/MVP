@@ -19,7 +19,7 @@ const router = require("./routes.js");
 app.use(router);
 
 // Serve the client files
-// app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static(path.join(__dirname, '../build')));
 
 // Set up what we are listening on
 app.listen(port, () => {

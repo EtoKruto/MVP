@@ -1,13 +1,11 @@
 .DS_Store
-.snowpack
 build
 node_modules
 file.env
 .env
 .prettierrc
 snowpack.config.mjs
-tsconfig.json
 web-test-runner.config.js
-types
+
 Assets
 
