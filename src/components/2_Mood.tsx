@@ -33,7 +33,11 @@ const Mood: React.FC<MoodProps> = ({
 
   return (
     <div className="section">
-      <h1> “What are you in the Mood for? </h1>
+      <h1 style={{ padding: 20 }}>
+        {' '}
+        PERSON 1 - What are you in the Mood for?{' '}
+      </h1>
+      <h2> </h2>
       <div
         className="main-container"
         style={{ display: 'flex', justifyContent: 'space-between' }}
@@ -85,8 +89,15 @@ const Mood: React.FC<MoodProps> = ({
               style={{ minHeight: '5vh', margin: 20, minWidth: '40vh' }}
             />
 
-            <button style={{ height: 40, minWidth: '20%' }} type="submit">
-              Add Them below
+            <button
+              style={{ height: 80, minWidth: '20%' }}
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '#Choice_Grid';
+              }}
+            >
+              Submit after you've entered Tags
             </button>
           </form>
         </div>
@@ -114,7 +125,7 @@ const Mood: React.FC<MoodProps> = ({
         </div>
       </div>
       <div>
-        <h2>Tags Chosen: </h2>
+        <h2 style={{ padding: 20 }}>Tags Chosen: </h2>
         <p>
           {watch('tags_1')}
           {watch('tags_1') ? ', ' : ' '}
@@ -126,10 +137,7 @@ const Mood: React.FC<MoodProps> = ({
           {watch('tags_4') ? ', ' : ' '}
           {watch('tags_5')}
         </p>
-        When Done, Press Submit to go the next step(this initiates the API
-        search)
       </div>
-      <button type="submit">Continue</button>
     </div>
   );
 };

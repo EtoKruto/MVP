@@ -3,10 +3,10 @@ import { Card, Row, Col, Container } from 'react-bootstrap';
 
 interface AppProps {}
 
-function Final_Choice({ page3Choices, handleClickFinal }: any) {
+function Final_Choice({ page3Choices }: any) {
   return (
     <div className="section">
-      <h1> OK Let’s choose this one (Please select up to 3) </h1>
+      <h1> PERSON 1 - Please Select the final choice </h1>
       <div className="top-container" style={{ display: 'flex' }}></div>
       <div className="main-container">
         <Container style={{ height: 500, overflow: 'overlay' }}>
@@ -15,7 +15,10 @@ function Final_Choice({ page3Choices, handleClickFinal }: any) {
               <Col key={page3result.id} xs={12} md={4} lg={3}>
                 <Card
                   style={{ marginBottom: 20, borderRadius: 20 }}
-                  onClick={() => handleClickFinal(page3result.id)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = '#Fireworks';
+                  }}
                 >
                   <Card.Img src={page3result.image_url} />
 
@@ -47,11 +50,6 @@ function Final_Choice({ page3Choices, handleClickFinal }: any) {
           </Row>
         </Container>
       </div>
-      <h4>
-        When Done, Press Submit to go the next step(this initiates the API
-        search)
-      </h4>
-      <button type="submit">Continue</button>
     </div>
   );
 }

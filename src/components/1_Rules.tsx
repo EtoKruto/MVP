@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
 
 type Inputs = {
   person1: string;
@@ -20,6 +19,7 @@ const Rules: React.FC<RuleProps> = ({ onSubmitPage1 }: RuleProps) => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<Inputs>();
 
@@ -141,14 +141,21 @@ const Rules: React.FC<RuleProps> = ({ onSubmitPage1 }: RuleProps) => {
             </div>
           </div>
         </div>
-        <h4>
+        <h4 style={{ padding: 20 }}>
           {watch('person1') || 'Person 1'} and {watch('person2') || 'Person 2'}{' '}
           have no idea what they want to eat, but they do know they want
           something at most {watch('radius') || 'something close by.'}{' '}
           {watch('radius') ? 'miles away.' : ''} Let's start by pressing the
           button below
         </h4>
-        <button style={{ height: 40, minWidth: '20%' }} type="submit">
+        <button
+          style={{ height: 60, minWidth: '20%' }}
+          type="submit"
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = '#Mood';
+          }}
+        >
           Send
         </button>
       </form>

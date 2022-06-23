@@ -11,7 +11,7 @@ function Choice_Grid({
 }: any) {
   return (
     <div className="section">
-      <h1> OK Let’s choose this one (Please select up to 3) </h1>
+      <h1> PERSON 2 - Please select up to 3 places by clicking on the card </h1>
       <div className="top-container" style={{ display: 'flex' }}>
         <h3 style={{ marginRight: 20 }}> How about a fitler? </h3>
         <Dropdown
@@ -64,10 +64,12 @@ function Choice_Grid({
         </Container>
       </div>
       <h4>
-        When Done, Press Submit to go the next step(this initiates the API
-        search)
+        Click Below when Done Choosing
       </h4>
-      <button type="submit">Continue</button>
+      <button type="submit" onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '#Final_Choice';
+              }}>Continue</button>
     </div>
   );
 }

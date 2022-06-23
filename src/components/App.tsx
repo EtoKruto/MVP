@@ -38,8 +38,9 @@ function sortByKey(array: any, key: string, sortOption: string) {
 
 function App(this: any): JSX.Element {
   const [selectionTags, setTags] = useState<string[]>([]);
+  const [players, setPlayers] = useState<string[]>([]);
   const [page3Choices, setPage3Choices] = useState<object[]>([]);
-  const [choiceResults, setChoices] = useState<object[]>([dummyObj]);
+  const [choiceResults, setChoices] = useState<object[]>([]);
 
   const [search, setSearch] = useState({
     radius: 5,
@@ -74,24 +75,15 @@ function App(this: any): JSX.Element {
       choiceResults.find((business: any) => business.id === id) || {};
     console.log('page3Choices.length', page3Choices.length);
     setPage3Choices([...page3Choices, item]);
-    // page3Choices.length > 0
-    //   ?
-    //   : setPage3Choices([item]);
   };
 
-  const handleClickFinal = (id: any) => {
-    // get object in array where id matches
-    // const item: any =
-    //   choiceResults.find((business: any) => business.id === id) || {};
-
-    console.log('congrats!');
-    // setPage3Choices([...page3Choices, item]);
-    // let choicesVar = page3Choices.length ? page3Choices : []
-
-    // setPage3Choices([...choicesVar, item]);
-  };
+  // const handleClickFinal = (id: any) => {
+  //   alert('congrats! PRESS RESET ON THE RIGHT SIDE TO START OVER');
+  // };
 
   function onSubmitPage1(data: any) {
+    console.log('data', data);
+    setPlayers([data.person1, data.person2]);
     setSearch(data);
     axios
       .get(
@@ -105,14 +97,12 @@ function App(this: any): JSX.Element {
         setSearch({ ...search, lat: lat, lng: lng });
 
         console.log(search);
-
         var params: any = {
           term: '',
           latitude: lat,
           longitude: lng,
           radius: data.miles * 1609.34,
-          limit: 20,
-        };
+          limit: 20,        };
         axios
           .get(`http://localhost:3001/restaurants`, { params: params })
           .then((APIresponse) => {
@@ -134,6 +124,9 @@ function App(this: any): JSX.Element {
   function onSubmitPage2(data: any) {
     const sendToYelp = removeEmpty(objectToArray(data)).join(', ');
     const { lat, lng, radius } = search;
+
+    // add later
+    // const attribute = (new === true ? new : '')
 
     var params: any = {
       term: sendToYelp,
@@ -160,13 +153,23 @@ function App(this: any): JSX.Element {
   return (
     <>
       <nav>
-        <div id="logoContainer">LOGO</div>
+        <div id="logoContainer"></div>
         <div>
           <a href="#Rules">Rules</a>
           <a href="#Mood">Mood</a>
           <a href="#Choice_Grid">Choices</a>
           <a href="#Final_Choice">Final Choice</a>
-          <a href="#Rules">Reset</a>
+          <a
+            href="#Rules"
+            onClick={() => {
+              setTags([]);
+              setPage3Choices([]);
+              setChoices([]);
+              setFilter('rating');
+            }}
+          >
+            Reset
+          </a>
         </div>
       </nav>
 
@@ -190,13 +193,12 @@ function App(this: any): JSX.Element {
       <section id="Final_Choice">
         <Final_Choice
           page3Choices={page3Choices}
-          handleClickFinal={handleClickFinal}
         />
       </section>
       <section id="Fireworks">
         <div className="pyro">
           <div className="before"></div>
-          <div>YOU DID IT</div>
+          <div className="didIt">YOU DID IT</div>
 
           <div className="after"></div>
         </div>
@@ -209,33 +211,33 @@ function App(this: any): JSX.Element {
 
 export default App;
 
-let dummyObj = {
-  alias: '',
-  categories: [],
-  coordinates: {
-    latitude: 0,
-    longitude: -1,
-  },
-  display_phone: '',
-  distance: 100,
-  id: '',
-  image_url: '',
-  is_closed: false,
-  location: {
-    address1: '',
-    address2: '',
-    address3: '',
-    city: '',
-    country: 'US',
-    display_address: ['', ''],
-    state: '',
-    zip_code: '',
-  },
-  name: '',
-  phone: '',
-  price: '',
-  rating: 3,
-  review_count: 100,
-  transactions: ['pickup', 'delivery'],
-  url: '',
-};
+// let dummyObj = {
+//   alias: '',
+//   categories: [],
+//   coordinates: {
+//     latitude: 0,
+//     longitude: -1,
+//   },
+//   display_phone: '',
+//   distance: 100,
+//   id: '',
+//   image_url: '',
+//   is_closed: false,
+//   location: {
+//     address1: '',
+//     address2: '',
+//     address3: '',
+//     city: '',
+//     country: 'US',
+//     display_address: ['', ''],
+//     state: '',
+//     zip_code: '',
+//   },
+//   name: '',
+//   phone: '',
+//   price: '',
+//   rating: 3,
+//   review_count: 100,
+//   transactions: ['pickup', 'delivery'],
+//   url: '',
+// };

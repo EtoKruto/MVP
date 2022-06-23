@@ -26,7 +26,7 @@ section {
   width: 100%;
   padding: 2px;
   padding-left: 120px;
-  border: 5px solid red;
+  /* border: 5px solid red; */
 }
 #Rules {
   background: #111816;
@@ -96,3 +96,11 @@ nav a {
   overflow: hidden;
 }
 
+.didIt {
+  display: flex;
+  height: 500px;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 40px;
+}
