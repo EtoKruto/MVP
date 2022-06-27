@@ -212,12 +212,10 @@ function App(this: any): JSX.Element {
           <div className="didIt">
             PRESS RESET IN THE TOP RIGHT TO START OVER
           </div>
-
-          <div className="after"></div>
         </div>
       </section>
 
-      <Details_Modal />
+      {/* <Details_Modal /> */}
     </>
   );
 }
