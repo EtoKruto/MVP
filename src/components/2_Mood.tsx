@@ -124,7 +124,7 @@ const Mood: React.FC<MoodProps> = ({
                         <Marquee
                           marqueeItems={selectionTags}
                           direction={'up'}
-                          minHeight={400}
+                          minHeight={800}
                           delay={20}
                           key={selectionTags[0]}
                         />

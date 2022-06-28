@@ -70,7 +70,7 @@
   /* remove dot (can move margin) */
 }
 .marquee {
-  /* display: contents; */
+  height: 500px;
 }
 .marquee-container-outline {
   height: 400px;
