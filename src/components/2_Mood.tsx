@@ -14,27 +14,34 @@ interface MoodProps {
   onSubmitPage2: Function;
   selectionTags: string[];
   players: string[];
+  resetForm: Boolean;
 }
 
 const Mood: React.FC<MoodProps> = ({
   onSubmitPage2,
   selectionTags,
   players,
+  resetForm,
 }: MoodProps) => {
-  let placeholderTagText = 'Choose a tag from the right or add your own';
   let placeholderTagStyle = { minHeight: '5vh', margin: 20, minWidth: '40vh' };
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<Inputs>();
+
+  useEffect(() => {
+    if (resetForm) {
+      reset();
+    }
+  }, [resetForm]);
 
   function onSubmit(data: any, e: any) {
     e.preventDefault();
     onSubmitPage2(data);
   }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="section">
@@ -50,7 +57,7 @@ const Mood: React.FC<MoodProps> = ({
               {...register('tags_1')}
               type="text"
               name="tags_1"
-              placeholder={placeholderTagText}
+              placeholder={'Choose a tag from the right  or add your own'}
               id="tags_1"
               style={placeholderTagStyle}
             />
@@ -59,7 +66,6 @@ const Mood: React.FC<MoodProps> = ({
               {...register('tags_2')}
               type="text"
               name="tags_2"
-              placeholder={placeholderTagText}
               id="tags_2"
               style={placeholderTagStyle}
             />
@@ -68,7 +74,6 @@ const Mood: React.FC<MoodProps> = ({
               {...register('tags_3')}
               type="text"
               name="tags_3"
-              placeholder={placeholderTagText}
               id="tags_3"
               style={placeholderTagStyle}
             />
@@ -77,7 +82,6 @@ const Mood: React.FC<MoodProps> = ({
               {...register('tags_4')}
               type="text"
               name="tags_4"
-              placeholder={placeholderTagText}
               id="tags_4"
               style={placeholderTagStyle}
             />
@@ -86,17 +90,27 @@ const Mood: React.FC<MoodProps> = ({
               {...register('tags_5')}
               type="text"
               name="tags_5"
-              placeholder={placeholderTagText}
               id="tags_5"
               style={placeholderTagStyle}
             />
+            <div>
+              {' '}
+              Press{' '}
+              <button
+                style={{ height: 80, minWidth: '10%', borderRadius: 20 }}
+                type="submit"
+              >
+                Submit{' '}
+              </button>{' '}
+              after you've entered Tags
+            </div>
           </div>
+
           <div className="right-container" style={{ minWidth: 400 }}>
             <h3>Selection of Tags Available</h3>
             <table style={{ width: '100%' }}>
               <tbody>
                 <tr>
-                  {' '}
                   <td>
                     <div className="marquee-container-outline">
                       {selectionTags.length ? (
@@ -142,30 +156,22 @@ const Mood: React.FC<MoodProps> = ({
                 </tr>
               </tbody>
             </table>
-            <div>
+            <div style={{ display: 'flex' }}>
               <h2 style={{ padding: 20 }}>Tags Chosen: </h2>
               <p>
                 {watch('tags_1')}
-                {watch('tags_1') ? ', ' : ' '}
+                {watch('tags_1') ? <br /> : ' '}
                 {watch('tags_2')}
-                {watch('tags_2') ? ', ' : ' '}
+                {watch('tags_2') ? <br /> : ' '}
                 {watch('tags_3')}
-                {watch('tags_3') ? ', ' : ' '}
+                {watch('tags_3') ? <br /> : ' '}
                 {watch('tags_4')}
-                {watch('tags_4') ? ', ' : ' '}
+                {watch('tags_4') ? <br /> : ' '}
                 {watch('tags_5')}
               </p>
             </div>
           </div>
         </div>
-        Press{' '}
-        <button
-          style={{ height: 80, minWidth: '10%', borderRadius: 20 }}
-          type="submit"
-        >
-          Submit{' '}
-        </button>{' '}
-        after you've entered Tags
       </div>
     </form>
   );

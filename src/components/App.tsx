@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { Routes, Route } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
-
 import './App.css';
 import './Fireworks.css';
+import her from './../assets/Her.png';
+import logo from './../assets/Logo_black.png';
+import him from './../assets/Him.png';
 import Rules from './1_Rules';
 import Mood from './2_Mood';
 import Choice_Grid from './3_Choice_Grid';
@@ -37,11 +37,24 @@ function sortByKey(array: any, key: string, sortOption: string) {
 }
 
 function App(this: any): JSX.Element {
-  const [selectionTags, setTags] = useState<string[]>([]);
+  const [selectionTags, setTags] = useState<string[]>([
+    'Thai',
+    'Vegetarian',
+    'Vegan',
+    'Kebab',
+    'Mediterranean',
+    'Middle',
+    'Ethiopian',
+    'Eritrean',
+    'Bars',
+    'Breakfast',
+    'Gelato',
+    'Desserts',
+    'Ice  Cream',
+  ]);
   const [players, setPlayers] = useState<string[]>([]);
-  const [page3Choices, setPage3Choices] = useState<object[]>([]);
   const [choiceResults, setChoices] = useState<object[]>([]);
-
+  const [page3Choices, setPage3Choices] = useState<object[]>([]);
   const [search, setSearch] = useState({
     radius: 5,
     new: false,
@@ -53,6 +66,7 @@ function App(this: any): JSX.Element {
     lng: 0,
   });
   const [filter, setFilter] = useState('rating');
+  const [resetForm, setReset] = useState(false);
 
   const handleChange = (event: any) => {
     setFilter(event.target.value);
@@ -69,12 +83,22 @@ function App(this: any): JSX.Element {
     setChoices(newChoices);
   }, [filter]);
 
-  const handleClick = (id: any) => {
+  const handleClick = (id: any, command: string) => {
     // get object in array where id matches
-    const item: any =
-      choiceResults.find((business: any) => business.id === id) || {};
-    // console.log('page3Choices.length', page3Choices.length);
-    setPage3Choices([...page3Choices, item]);
+    // console.log(page3Choices);
+    if (command === 'reset') {
+      setPage3Choices([]);
+    } else {
+      const item: any =
+        choiceResults.find((business: any) => business.id === id) || {};
+      // console.log('page3Choices.length', page3Choices.length);
+      if (page3Choices.length < 3) {
+        // add object to array
+        setPage3Choices([...page3Choices, item]);
+      } else {
+        alert('You can only select 3 options');
+      }
+    }
   };
 
   // const handleClickFinal = (id: any) => {
@@ -159,8 +183,17 @@ function App(this: any): JSX.Element {
   }
   return (
     <>
+      <div id="logoContainer">
+        <img style={{ paddingRight: 80 }} src={her} alt="left-logo" />
+        <img src={logo} alt="middle-logo" />
+        <img
+          style={{ paddingTop: 30, paddingBottom: 30 }}
+          src={him}
+          alt="right-logo"
+        />
+      </div>
       <nav>
-        <div id="logoContainer"></div>
+        <div id="navBarAnchor"></div>
         <div>
           <a href="#Rules">Rules</a>
           <a href="#Mood">Mood</a>
@@ -173,6 +206,7 @@ function App(this: any): JSX.Element {
               setPage3Choices([]);
               setChoices([]);
               setFilter('rating');
+              setReset(true);
             }}
           >
             Reset
@@ -181,7 +215,7 @@ function App(this: any): JSX.Element {
       </nav>
 
       <section id="Rules">
-        <Rules onSubmitPage1={onSubmitPage1} />
+        <Rules onSubmitPage1={onSubmitPage1} resetForm={resetForm} />
       </section>
 
       <section id="Mood">
@@ -189,6 +223,7 @@ function App(this: any): JSX.Element {
           onSubmitPage2={onSubmitPage2}
           selectionTags={selectionTags}
           players={players}
+          resetForm={resetForm}
         />
       </section>
 
@@ -199,13 +234,14 @@ function App(this: any): JSX.Element {
           handleChange={handleChange}
           handleClick={handleClick}
           players={players}
+          page3Choices={page3Choices}
         />
       </section>
 
       <section id="Final_Choice">
         <Final_Choice page3Choices={page3Choices} players={players} />
       </section>
-      <section id="Fireworks">
+      <section id="Fireworks" style={{ paddingTop: 500 }}>
         <div className="pyro">
           <div className="before"></div>
           <div className="didIt">YOU DID IT. {'\n'}</div>

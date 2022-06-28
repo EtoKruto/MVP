@@ -14,15 +14,20 @@ const Dropdown: React.FC<DropdownProps> = ({
   onChange,
 }: DropdownProps) => {
   return (
-    <label>
-      {label}
-      <select value={value} onChange={onChange} multiple={false}
->
+    <div>
+      <select
+        value={value}
+        onChange={onChange}
+        multiple={false}
+        className="select-css"
+      >
         {(options || []).map((option: any) => (
-          <option key={option.value} value={option.value}>{option.label}</option>
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
         ))}
       </select>
-    </label>
+    </div>
   );
 };
 

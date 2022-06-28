@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Container } from 'react-bootstrap';
 
-
 interface FinalProps {
   page3Choices: object[];
   players: string[];
@@ -9,13 +8,28 @@ interface FinalProps {
 const Final_Choice: React.FC<FinalProps> = ({ page3Choices, players }: any) => {
   return (
     <div className="section">
-      <h1> {players[0]} - Please Select the final choice </h1>
+      <h1>
+        {' '}
+        <span style={{ fontSize: '5vh' }}>
+          {' '}
+          {players[0] || 'Person 1'}{' '}
+        </span>{' '}
+        please Select the final choice{' '}
+      </h1>
       <div className="top-container" style={{ display: 'flex' }}></div>
       <div className="main-container">
-        <Container style={{ height: 500, overflow: 'overlay' }}>
+        <Container
+          style={{
+            height: 600,
+            overflow: 'overlay',
+            padding: 50,
+            color: 'black',
+          }}
+        >
           <Row>
-            {(page3Choices).map((page3result: any) => (
+            {page3Choices.map((page3result: any) => (
               <Col key={page3result.id} xs={12} md={4} lg={3}>
+                <div className='shake'>
                 <Card
                   style={{ marginBottom: 20, borderRadius: 20 }}
                   onClick={(e) => {
@@ -23,7 +37,16 @@ const Final_Choice: React.FC<FinalProps> = ({ page3Choices, players }: any) => {
                     window.location.href = '#Fireworks';
                   }}
                 >
-                  <Card.Img src={page3result.image_url} />
+                  <Card.Img
+                    src={page3result.image_url}
+                    style={{
+                      marginBottom: 20,
+                      borderBottomLeftRadius: 0,
+                      borderBottomRightRadius: 0,
+                      borderTopLeftRadius: 50,
+                      borderTopRightRadius: 50,
+                    }}
+                  />
 
                   <Card.Body>
                     <Card.Title>{page3result.name}</Card.Title>
@@ -48,6 +71,7 @@ const Final_Choice: React.FC<FinalProps> = ({ page3Choices, players }: any) => {
                     </Card.Text>
                   </Card.Body>
                 </Card>
+                </div>
               </Col>
             ))}
           </Row>
@@ -55,6 +79,6 @@ const Final_Choice: React.FC<FinalProps> = ({ page3Choices, players }: any) => {
       </div>
     </div>
   );
-}
+};
 
 export default Final_Choice;
