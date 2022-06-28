@@ -55,16 +55,6 @@ function App(this: any): JSX.Element {
   const [players, setPlayers] = useState<string[]>([]);
   const [choiceResults, setChoices] = useState<object[]>([]);
   const [page3Choices, setPage3Choices] = useState<object[]>([]);
-  const [search, setSearch] = useState({
-    radius: 5,
-    new: false,
-    person1: '',
-    person2: '',
-    price: '',
-    zipcode: '',
-    lat: 0,
-    lng: 0,
-  });
   const [filter, setFilter] = useState('rating');
   const [resetForm, setReset] = useState(false);
 
@@ -79,48 +69,33 @@ function App(this: any): JSX.Element {
     } else {
       newChoices = sortByKey(old, filter, 'asc');
     }
-    // console.log(newChoices);
     setChoices(newChoices);
   }, [filter]);
 
-  const handleClick = (id: any, command: string) => {
-    // get object in array where id matches
-    // console.log(page3Choices);
-    if (command === 'reset') {
-      setPage3Choices([]);
-    } else {
-      const item: any =
-        choiceResults.find((business: any) => business.id === id) || {};
-      // console.log('page3Choices.length', page3Choices.length);
-      if (page3Choices.length < 3) {
-        // add object to array
-        setPage3Choices([...page3Choices, item]);
-      } else {
-        alert('You can only select 3 options');
-      }
-    }
-  };
-
-  // const handleClickFinal = (id: any) => {
-  //   alert('congrats! PRESS RESET ON THE RIGHT SIDE TO START OVER');
-  // };
-
   function onSubmitPage1(data: any) {
-    // console.log('data', data);
+    console.log('data', data);
     setPlayers([data.person1, data.person2]);
-    setSearch(data);
+    let attributes = data.attributes === false ? '' : data.attributes;
+
+    let storage: any = {
+      attributes: attributes,
+      zipcode: data.zipcode,
+      price: data.price,
+      radius: data.radius,
+    };
+
     axios
       .get(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${
           data.zipcode
         }&key=${import.meta.env.GOOGLE_API_KEY}`,
       )
-      .then(function (response) {
+      .then((response) => {
         const { lat, lng } = response.data.results[0].geometry.location;
 
-        setSearch({ ...search, lat: lat, lng: lng });
+        storage = { ...storage, lat: lat, lng: lng };
+        sessionStorage.setItem('currentSearch', JSON.stringify(storage));
 
-        // console.log(search);
         var params: any = {
           term: '',
           latitude: lat,
@@ -129,7 +104,7 @@ function App(this: any): JSX.Element {
           limit: 20,
         };
         axios
-          .get(`http://localhost:3001/restaurants`, { params: params })
+          .get(`http://localhost:3001/restaurants/tags`, { params: params })
           .then((APIresponse) => {
             const temptags: string[] = [];
 
@@ -151,10 +126,11 @@ function App(this: any): JSX.Element {
 
   function onSubmitPage2(data: any) {
     const sendToYelp = removeEmpty(objectToArray(data)).join(', ');
-    const { lat, lng, radius } = search;
+    const storage_Page2 = JSON.parse(sessionStorage.currentSearch);
 
-    // add later
-    // const attribute = (new === true ? new : '')
+    const { lat, lng, radius, price, attributes } = storage_Page2;
+    console.log(lat, lng, radius, price.length, attributes);
+    const priceNum = price.length;
 
     var params: any = {
       term: sendToYelp,
@@ -162,25 +138,49 @@ function App(this: any): JSX.Element {
       longitude: lng,
       radius: radius * 1609.34,
       limit: '50',
+      price: priceNum,
+      attributes: attributes,
     };
-
+    console.log('params', params);
     axios
       .get(`http://localhost:3001/restaurants`, { params: params })
       .then((APIresponse) => {
         const businessArr: object[] = [];
+        console.log('APIresponse', APIresponse);
+
         APIresponse.data.businesses.forEach((business: any) => {
           businessArr.push(business);
         });
-
-        setChoices(sortByKey(businessArr, filter, 'dsc'));
-        setTimeout(() => {
-          window.location.href = '#Choice_Grid';
-        }, 500);
+        if (businessArr.length < 2) {
+          alert(
+            'Please use more specific tags or delete tags to broaden your search',
+          );
+        } else {
+          setChoices(sortByKey(businessArr, filter, 'dsc'));
+          setTimeout(() => {
+            window.location.href = '#Choice_Grid';
+          }, 500);
+        }
       })
       .catch((error) => {
         console.log('error', error);
       });
   }
+
+  const handleClick = (id: any, command: string) => {
+    if (command === 'reset') {
+      setPage3Choices([]);
+    } else {
+      const item: any =
+        choiceResults.find((business: any) => business.id === id) || {};
+      if (page3Choices.length < 3) {
+        setPage3Choices([...page3Choices, item]);
+      } else {
+        alert('You can only select 3 options');
+      }
+    }
+  };
+
   return (
     <>
       <div id="logoContainer">
@@ -197,7 +197,7 @@ function App(this: any): JSX.Element {
         <div>
           <a href="#Rules">Rules</a>
           <a href="#Mood">Mood</a>
-          <a href="#Choice_Grid">Choices</a>
+          <a href="#Choice_Grid"> 3 Choices</a>
           <a href="#Final_Choice">Final Choice</a>
           <a
             href="#Rules"
@@ -207,6 +207,7 @@ function App(this: any): JSX.Element {
               setChoices([]);
               setFilter('rating');
               setReset(true);
+              sessionStorage.removeItem('currentSearch');
             }}
           >
             Reset
@@ -244,7 +245,7 @@ function App(this: any): JSX.Element {
       <section id="Fireworks" style={{ paddingTop: 500 }}>
         <div className="pyro">
           <div className="before"></div>
-          <div className="didIt">YOU DID IT. {'\n'}</div>
+          <div className="didIt">YOU DID IT! {'\n'}</div>
           <div className="didIt">
             PRESS RESET IN THE TOP RIGHT TO START OVER
           </div>

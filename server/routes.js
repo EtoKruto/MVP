@@ -8,7 +8,12 @@ const router = express.Router();
 
 // -------------- Questions -------------- //
 // console.log('router', router);
+router.get('/restaurants/tags', controller.restaurants.getTags);
+
 router.get('/restaurants', controller.restaurants.getRestaurants);
+
+
+
 
 // router.get('/qa/questions/:question_id/answers', controllers.questions.getAnswers);
 

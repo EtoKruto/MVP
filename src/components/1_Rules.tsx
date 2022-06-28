@@ -7,7 +7,7 @@ type Inputs = {
   zipcode: number;
   radius: number;
   price: string;
-  new: string;
+  attributes: string;
 };
 
 interface RuleProps {
@@ -143,10 +143,10 @@ const Rules: React.FC<RuleProps> = ({
             <h4> Do we want to try something new?</h4>
             <input
               className="inputField"
-              {...register('new')}
+              {...register('attributes')}
               type="checkbox"
-              name="new"
-              value="true"
+              name="attributes"
+              value="hot_and_new"
             />
           </div>
         </div>
@@ -157,10 +157,10 @@ const Rules: React.FC<RuleProps> = ({
         {watch('radius')
           ? `less than ${watch('radius')} miles away.`
           : 'close by.'}{' '}
-        They definitely want to {watch('price') === '$$$' ? 'ball out.' : ''}
-        {watch('price') === '$$' ? 'find something modest.' : ''}{' '}
-        {watch('price') === '$' ? 'eat on a budget.' : ''}{' '}
-        {watch('new') === 'true'
+        They definitely want to eat {watch('price') === '$$$' ? 'and ball out.' : ''}
+        {watch('price') === '$$' ? 'and find something modest.' : ''}{' '}
+        {watch('price') === '$' ? 'and eat on a budget.' : ''}{' '}
+        {watch('attributes') === 'hot_and_new'
           ? 'Oh and almost forgot, they want to try something new'
           : ''}
         ... <br />
