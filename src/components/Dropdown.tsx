@@ -1,14 +1,12 @@
 import * as React from 'react';
 
 interface DropdownProps {
-  label?: any;
   value: any;
   options: any;
   onChange: any;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
-  label,
   value,
   options,
   onChange,
@@ -32,5 +30,3 @@ const Dropdown: React.FC<DropdownProps> = ({
 };
 
 export default Dropdown;
-
-// {value === '' ? }

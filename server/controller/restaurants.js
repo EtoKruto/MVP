@@ -2,27 +2,8 @@ const axios = require('axios');
 
 module.exports = {
   getRestaurants: function (req, res) {
-    // console.log('we made it');
 
-    // console.log('req.body', req.body);
-    console.log('req.query', req.query);
     const { latitude, longitude, limit, term, attributes, price } = req.query;
-    // console.log('req.params', req.params);
-    // const qsq = new URLSearchParams(req.query);
-    // const qsp = new URLSearchParams(req.params);
-    // console.log('qsq', qsq);
-    // console.log('qsp', qsp);
-
-    // console.log(`https://api.yelp.com/v3/businesses/search?${qsq}`,     );
-    // console.log(
-    //   'latitude, longitude, limit, term, attributes, price',
-    //   latitude,
-    //   longitude,
-    //   limit,
-    //   term,
-    //   attributes,
-    //   price,
-    // );
 
     const config = {
       headers: {
@@ -37,8 +18,6 @@ module.exports = {
         config,
       )
       .then((APIresponse) => {
-        console.log('success');
-        // console.log('APIdata', (APIresponse.data));
         res.send(APIresponse.data);
       })
       .catch((error) => {
@@ -47,15 +26,7 @@ module.exports = {
       });
   },
   getTags: function (req, res) {
-    // console.log('req.query', req.query);
     const { latitude, longitude, limit } = req.query;
-
-    console.log(
-      'latitude, longitude, limit',
-      latitude,
-      longitude,
-      limit,
-    );
 
     const config = {
       headers: {
@@ -70,8 +41,6 @@ module.exports = {
         config,
       )
       .then((APIresponse) => {
-        console.log('success');
-        // console.log('APIdata', (APIresponse.data));
         res.send(APIresponse.data);
       })
       .catch((error) => {

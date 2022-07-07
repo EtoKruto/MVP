@@ -6,7 +6,7 @@ function Details_Modal ({}: AppProps) {
   return (
 
     <div>
-    THIS IS DETAILS
+    {/* TBD */}
     </div>
 
     );

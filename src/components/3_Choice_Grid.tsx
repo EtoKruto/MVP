@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, Row, Col, Container } from 'react-bootstrap';
 import Dropdown from './Dropdown';
@@ -30,7 +30,6 @@ function Choice_Grid({
           options={[
             { label: 'Rating', value: 'rating' },
             { label: 'Distance', value: 'distance' },
-            // { label: 'Price', value: 'price' },
           ]}
           value={filter}
           onChange={handleChange}
@@ -39,7 +38,7 @@ function Choice_Grid({
       <div className="main-container">
         <Container
           style={{
-            height: 600,
+            height: 700,
             overflow: 'overlay',
             padding: 50,
             color: 'black',
@@ -123,10 +122,3 @@ function Choice_Grid({
 
 export default Choice_Grid;
 
-//   <div className="left-container">
-//   <h3>Scroll and Add</h3>
-// </div>
-
-// <div className="right-container" style={{ minWidth: 400 }}>
-//   <h3>Picked</h3>
-// </div>

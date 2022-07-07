@@ -157,7 +157,8 @@ const Rules: React.FC<RuleProps> = ({
         {watch('radius')
           ? `less than ${watch('radius')} miles away.`
           : 'close by.'}{' '}
-        They definitely want to eat {watch('price') === '$$$' ? 'and ball out.' : ''}
+        They definitely want to eat{' '}
+        {watch('price') === '$$$' ? 'and ball out.' : ''}
         {watch('price') === '$$' ? 'and find something modest.' : ''}{' '}
         {watch('price') === '$' ? 'and eat on a budget.' : ''}{' '}
         {watch('attributes') === 'hot_and_new'

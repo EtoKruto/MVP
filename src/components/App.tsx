@@ -73,7 +73,6 @@ function App(this: any): JSX.Element {
   }, [filter]);
 
   function onSubmitPage1(data: any) {
-    console.log('data', data);
     setPlayers([data.person1, data.person2]);
     let attributes = data.attributes === false ? '' : data.attributes;
 
@@ -129,7 +128,6 @@ function App(this: any): JSX.Element {
     const storage_Page2 = JSON.parse(sessionStorage.currentSearch);
 
     const { lat, lng, radius, price, attributes } = storage_Page2;
-    console.log(lat, lng, radius, price.length, attributes);
     const priceNum = price.length;
 
     var params: any = {
@@ -141,12 +139,10 @@ function App(this: any): JSX.Element {
       price: priceNum,
       attributes: attributes,
     };
-    console.log('params', params);
     axios
       .get(`http://localhost:3001/restaurants`, { params: params })
-      .then((APIresponse) => {
+      .then((APIresponse: any) => {
         const businessArr: object[] = [];
-        console.log('APIresponse', APIresponse);
 
         APIresponse.data.businesses.forEach((business: any) => {
           businessArr.push(business);
@@ -252,40 +248,10 @@ function App(this: any): JSX.Element {
         </div>
       </section>
 
-      {/* <Details_Modal /> */}
+      <Details_Modal />
     </>
   );
 }
 
 export default App;
 
-// let dummyObj = {
-//   alias: '',
-//   categories: [],
-//   coordinates: {
-//     latitude: 0,
-//     longitude: -1,
-//   },
-//   display_phone: '',
-//   distance: 100,
-//   id: '',
-//   image_url: '',
-//   is_closed: false,
-//   location: {
-//     address1: '',
-//     address2: '',
-//     address3: '',
-//     city: '',
-//     country: 'US',
-//     display_address: ['', ''],
-//     state: '',
-//     zip_code: '',
-//   },
-//   name: '',
-//   phone: '',
-//   price: '',
-//   rating: 3,
-//   review_count: 100,
-//   transactions: ['pickup', 'delivery'],
-//   url: '',
-// };
