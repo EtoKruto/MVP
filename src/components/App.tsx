@@ -90,36 +90,69 @@ function App(this: any): JSX.Element {
         }&key=${import.meta.env.GOOGLE_API_KEY}`,
       )
       .then((response) => {
+        if (response.data.results.length < 1) {
+          alert(
+            'Please try a different zipcode. We could not find that zipcode in our database.',
+          );
+        }
         const { lat, lng } = response.data.results[0].geometry.location;
 
         storage = { ...storage, lat: lat, lng: lng };
         sessionStorage.setItem('currentSearch', JSON.stringify(storage));
 
-        var params: any = {
-          term: '',
-          latitude: lat,
-          longitude: lng,
-          radius: data.miles * 1609.34,
-          limit: 20,
-        };
-        axios
-          .get(`http://localhost:3001/restaurants/tags`, { params: params })
-          .then((APIresponse) => {
-            const temptags: string[] = [];
+        // var params: any = {
+        //   term: '',
+        //   latitude: lat,
+        //   longitude: lng,
+        //   radius: data.miles * 1609.34,
+        //   limit: 20,
+        // };
 
-            APIresponse.data.businesses.forEach((business: any) => {
-              business.categories.forEach((category: any) => {
-                temptags.push(category.title);
-              });
-            });
-            setTags(removeDuplicatesInArray(temptags));
-            setTimeout(() => {
-              window.location.href = '#Mood';
-            }, 500);
-          })
-          .catch((error) => {
-            console.log('error', error);
-          });
+        // const config = {
+        //   headers: {
+        //     'Access-Control-Allow-Origin': '*',
+        //     Authorization: 'Bearer ' + import.meta.env.YELP_API_KEY,
+        //     crossdomain: true,
+        //   },
+        // };
+
+        fetch(
+          `https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${lng}&limit=20`,
+          {
+            method: 'GET',
+            mode: 'cors',
+            headers: new Headers({
+              'Access-Control-Allow-Origin':'*',
+              Authorization: 'Bearer ' + import.meta.env.YELP_API_KEY,
+            }),
+          },
+        )
+          .then((response) => response.json())
+          .then((data) => console.log('data', data))
+          .catch((err) => console.error('err', err));
+
+        // axios
+        //   .get(
+        //     `https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${lng}&limit=20`,
+        //     config,
+        //   )
+        //   .then((APIresponse) => {
+        //     console.log('APIresponse', APIresponse);
+
+        //     const temptags: string[] = [];
+        //     APIresponse.data.businesses.forEach((business: any) => {
+        //       business.categories.forEach((category: any) => {
+        //         temptags.push(category.title);
+        //       });
+        //     });
+        //     setTags(removeDuplicatesInArray(temptags));
+        //     setTimeout(() => {
+        //       window.location.href = '#Mood';
+        //     }, 500);
+        //   })
+        //   .catch((error) => {
+        //     console.log('error1', error);
+        //   });
       });
   }
 
@@ -130,17 +163,29 @@ function App(this: any): JSX.Element {
     const { lat, lng, radius, price, attributes } = storage_Page2;
     const priceNum = price.length;
 
-    var params: any = {
-      term: sendToYelp,
-      latitude: lat,
-      longitude: lng,
-      radius: radius * 1609.34,
-      limit: '50',
-      price: priceNum,
-      attributes: attributes,
+    // var params: any = {
+    //   term: sendToYelp,
+    //   latitude: lat,
+    //   longitude: lng,
+    //   radius: radius * 1609.34,
+    //   limit: '50',
+    //   price: priceNum,
+    //   attributes: attributes,
+    // };
+
+    const config = {
+      headers: {
+        Authorization: 'Bearer ' + import.meta.env.YELP_API_KEY,
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+      },
     };
+
     axios
-      .get(`http://localhost:3001/restaurants`, { params: params })
+      .get(
+        `https://api.yelp.com/v3/businesses/search?term=${sendToYelp}&latitude=${lat}&longitude=${lng}&limit=50&price=${priceNum}&attributes=${attributes}`,
+        config,
+      )
       .then((APIresponse: any) => {
         const businessArr: object[] = [];
 
@@ -159,7 +204,7 @@ function App(this: any): JSX.Element {
         }
       })
       .catch((error) => {
-        console.log('error', error);
+        console.log('error2', error);
       });
   }
 
@@ -254,4 +299,3 @@ function App(this: any): JSX.Element {
 }
 
 export default App;
-
